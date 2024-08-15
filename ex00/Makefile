@@ -6,7 +6,7 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/09 13:40:39 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/08/09 13:52:58 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/08/15 12:18:00 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ vpath %.hpp $(INC_DIR)
 vpath %.o $(OBJ_DI)
 
 HEADERS						:= BitcoinExchange.hpp
-SOURCE						:= main.cpp
+SOURCE						:= main.cpp BitcoinExchange.cpp
 OBJECTS						:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.cpp=.o))
 	
 ################################################################################
