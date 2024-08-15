@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:50:13 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/15 12:45:40 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/15 18:08:33 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char **argv) {
 	try {
 		validateArguments(argc);
 		BitcoinExchange btc("./data.csv");
-		std::cout << btc;
+		btc.processFile(argv[1]);
 	} catch (std::exception &e) {
 		std::cerr << RED << e.what() << RESET << std::endl;
 		return 1;

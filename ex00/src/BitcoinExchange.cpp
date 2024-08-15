@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:35:09 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/15 12:46:34 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/15 18:16:37 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 #include <sys/stat.h>
 #include <iostream>
 #include <limits>
+#include <ctime>
 
 void BitcoinExchange::_checkDatabaseHeader(std::string const &line) {
 	if (line != "date,exchange_rate")
-		throw std::runtime_error("Invalid header on the input file.");
+		throw std::runtime_error("Invalid header on the input file => " + line);
 }
 
 void BitcoinExchange::_checkInputHeader(std::string const &line) {
@@ -33,16 +34,16 @@ void BitcoinExchange::_checkInputHeader(std::string const &line) {
 		switch (i) {
 			case 0:
 				if (world != "date")
-					throw std::runtime_error("Invalid header on the Database input file.");
+					throw std::runtime_error("Invalid header on the Database input file => " + world);
 			case 1:
 				if (world != "|")
-					throw std::runtime_error("Invalid header on the Database input file.");
+					throw std::runtime_error("Invalid header on the Database input file => " + world);
 			case 2:
 				if (world != "value")
-					throw std::runtime_error("Invalid header on the Database input file.");
+					throw std::runtime_error("Invalid header on the Database input file => " + world);
 			case 3:
 				if (!world.empty())
-					throw std::runtime_error("Invalid header on the Database input file.");
+					throw std::runtime_error("Invalid header on the Database input file => " + world);
 		}
 	}
 }
@@ -98,6 +99,23 @@ bool BitcoinExchange::_setRate(std::string const &s_rate, double &rate) {
 	return true;
 }
 
+bool BitcoinExchange::_setValue(std::string const &s_value, double &value) {
+	if (s_value.empty())
+		return false;
+	std::istringstream stream(s_value);
+	stream >> value;
+	if (stream.fail()) {
+		return false;
+	}
+	if (value < 0) {
+		std::cerr << RED "Error: not a positive number." RESET << std::endl;
+		return false;
+	} else if (value > 1000)  {
+		std::cerr << RED "Error: too large a number." RESET << std::endl;
+	}
+	return true;
+}
+
 BitcoinExchange::BitcoinExchange(std::string const &filename) {
 	_checkFile(filename);
 	std::ifstream file(filename.c_str(), std::ifstream::in);
@@ -114,20 +132,20 @@ BitcoinExchange::BitcoinExchange(std::string const &filename) {
 	while (std::getline(file, line)) {
 		std::string::size_type pos = line.find(',');
 		if (std::string::npos == pos) {
-			throw std::runtime_error("Invalid format on the Database: " + line);
+			throw std::runtime_error("Invalid format on the Database => " + line);
 		}
 		s_date = line.substr(0, pos);
 		s_rate = line.substr(pos + 1);
 		if (!this->_setDate(s_date, date)) {
-			throw std::runtime_error("Invalid date on the Database: " + line);
+			throw std::runtime_error("Invalid date on the Database => " + line);
 		}
 		if (!this->_setRate(s_rate, rate)) {
-			throw std::runtime_error("Invalid rate on the Database: " + line);
+			throw std::runtime_error("Invalid rate on the Database => " + line);
 		}
 		std::pair<std::map<time_t, double>::iterator, bool> result
 			= this->_btcDB.insert(std::make_pair(date, rate));
 		if (!result.second) {
-			throw std::runtime_error("Duplicate entry on the Database: " + line);
+			throw std::runtime_error("Duplicate entry on the Database => " + line);
 		}
 	}
 }
@@ -165,4 +183,32 @@ std::ostream &operator<<(std::ostream &out, BitcoinExchange const &btc) {
 
 void	BitcoinExchange::processFile(std::string const &filename) {
 	_checkFile(filename);
+	std::ifstream file(filename.c_str(), std::ifstream::in);
+	if (file.fail()) {
+		throw std::runtime_error("Could not open file.");
+	}
+	std::string line;
+	std::getline(file, line);
+	this->_checkInputHeader(line);
+	std::string s_date;
+	std::string s_value;
+	time_t date;
+	double value;
+	// int		result;
+	while (std::getline(file, line)) {
+		std::string::size_type pos = line.find('|');
+		if (std::string::npos == pos) {
+			std::cerr << RED "Error: bad input => " << line << RESET << std::endl;
+			continue;
+		}
+		s_date = line.substr(0, pos - 1);
+		s_value = line.substr(pos + 2);
+		if (!this->_setDate(s_date, date)) {
+				std::cerr << RED "Error: bad input => " << date << RESET << std::endl;
+				continue;
+		}
+		if (!this->_setValue(s_value, value)) {
+				continue;
+		}
+	}
 }
