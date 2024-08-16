@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:35:09 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/15 18:16:37 by johnavar         ###   ########.fr       */
+/*   Updated: 2024/08/16 11:36:08 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,29 @@ void BitcoinExchange::_checkDatabaseHeader(std::string const &line) {
 }
 
 void BitcoinExchange::_checkInputHeader(std::string const &line) {
-	std::string world;
+	std::string word;
 
 	std::istringstream stream(line);
-	for (int i = 0; i < 4; i++) {
-		stream >> world;
+	for (int i = 0; i < 3; i++) {
+		stream >> word;
 		switch (i) {
 			case 0:
-				if (world != "date")
-					throw std::runtime_error("Invalid header on the Database input file => " + world);
+				if (word != "date")
+					throw std::runtime_error("Invalid header on the Database input file => " + word);
+				break;
 			case 1:
-				if (world != "|")
-					throw std::runtime_error("Invalid header on the Database input file => " + world);
+				if (word != "|")
+					throw std::runtime_error("Invalid header on the Database input file => " + word);
+				break;
 			case 2:
-				if (world != "value")
-					throw std::runtime_error("Invalid header on the Database input file => " + world);
-			case 3:
-				if (!world.empty())
-					throw std::runtime_error("Invalid header on the Database input file => " + world);
+				if (word != "value")
+					throw std::runtime_error("Invalid header on the Database input file => " + word);
+				break;
 		}
 	}
+	if (stream >> word)
+		throw std::runtime_error(
+			"Invalid header on the Database input file, extra unexpected text found => " + word);
 }
 
 void BitcoinExchange::_checkFile(std::string const &filename) {
@@ -112,6 +115,7 @@ bool BitcoinExchange::_setValue(std::string const &s_value, double &value) {
 		return false;
 	} else if (value > 1000)  {
 		std::cerr << RED "Error: too large a number." RESET << std::endl;
+		return false;
 	}
 	return true;
 }
@@ -181,6 +185,20 @@ std::ostream &operator<<(std::ostream &out, BitcoinExchange const &btc) {
 	return out;
 }
 
+bool BitcoinExchange::_setExchangeValue(time_t date, double &value, double &exchangeValue) {
+	std::map<time_t, double>::const_iterator it = this->_btcDB.lower_bound(date);
+	if (it == this->_btcDB.begin() && it->first != date) {
+		std::cerr << RED "Error: No exchange rate found for this date => " << date << RESET << std::endl;
+		return false;
+	}
+	if (it == this->_btcDB.end() || it->first != date) {
+		it--;
+	}
+
+	exchangeValue = it->second * value;
+	return true;
+}
+
 void	BitcoinExchange::processFile(std::string const &filename) {
 	_checkFile(filename);
 	std::ifstream file(filename.c_str(), std::ifstream::in);
@@ -192,9 +210,9 @@ void	BitcoinExchange::processFile(std::string const &filename) {
 	this->_checkInputHeader(line);
 	std::string s_date;
 	std::string s_value;
-	time_t date;
-	double value;
-	// int		result;
+	time_t	date;
+	double	value;
+	double	exchangeValue;
 	while (std::getline(file, line)) {
 		std::string::size_type pos = line.find('|');
 		if (std::string::npos == pos) {
@@ -210,5 +228,9 @@ void	BitcoinExchange::processFile(std::string const &filename) {
 		if (!this->_setValue(s_value, value)) {
 				continue;
 		}
+		if (!this->_setExchangeValue(date, value, exchangeValue))
+			continue;
+		std::cout << YELLOW << s_date << RESET " => " BLUE << value
+			<< RESET " = " GREEN << exchangeValue << RESET << std::endl;
 	}
 }

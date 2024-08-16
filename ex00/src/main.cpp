@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/09 13:50:13 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/15 18:08:33 by johnavar         ###   ########.fr       */
+/*   Updated: 2024/08/16 11:40:21 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 
 void	validateArguments(int argc) {
 	if (argc != 2){
-		throw std::runtime_error(
-			"Wrong number of arguments\nUsage: ./btc path/second/database");
+		throw std::runtime_error("Error: could not open file");
 	}
 }
+
 int	main(int argc, char **argv) {
 	try {
 		validateArguments(argc);
