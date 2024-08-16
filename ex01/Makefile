@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/08/09 13:40:39 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/08/16 12:01:28 by sebasnadu        ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 ################################################################################
 ##                                   COLORS                                   ##
 ################################################################################
@@ -25,10 +13,10 @@ CYAN        := \033[0;96m
 WHITE       := \033[0;97m
 	
 ################################################################################
-##                                    BTC                                     ##
+##                                    RPN                                     ##
 ################################################################################
 
-NAME							:= btc
+NAME							:= RPN
 CXX								:= c++
 RM								:= rm -rf
 	
@@ -44,8 +32,8 @@ vpath %.cpp $(SRC_DIR)
 vpath %.hpp $(INC_DIR)
 vpath %.o $(OBJ_DI)
 
-HEADERS						:= BitcoinExchange.hpp colors.hpp
-SOURCE						:= main.cpp BitcoinExchange.cpp
+HEADERS						:= RPN.hpp colors.hpp
+SOURCE						:= main.cpp RPN.cpp
 OBJECTS						:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.cpp=.o))
 	
 ################################################################################
@@ -54,6 +42,9 @@ OBJECTS						:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.cpp=.o))
 
 CXXFLAGS					:= -Wall -Wextra -Werror -std=c++98
 INCLUDE						:= -I $(INC_DIR)
+ifdef DEBUG
+	CXXFLAGS += -g3 -fsanitize=address -D DEBUG=1
+endif
 	
 ################################################################################
 ##                                PROGRESS_BAR                                ##
@@ -68,7 +59,7 @@ ifeq ($(shell test $(NUM_TO_COMPILE) -le 0; echo $$?), 0)
 endif
 
 COMPILED_FILES		= 0
-COMPILATION_PCT		= $(shell expr 100 \* $(COMPILED_FILES) / $(NUM_TO_COMPILE))
+COMPILATION_PCT		= $(shell expr $(COMPILED_FILES) \* 100 / $(NUM_TO_COMPILE))
 	
 ################################################################################
 ##                                COMPILATION                                 ##

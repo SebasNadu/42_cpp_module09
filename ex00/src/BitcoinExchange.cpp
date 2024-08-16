@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:35:09 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/16 11:36:08 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/16 12:46:23 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,8 +164,6 @@ BitcoinExchange &BitcoinExchange::operator=(BitcoinExchange const &rhs) {
 	}
 	return *this;
 }
-
-BitcoinExchange::BitcoinExchange(void) {};
 
 BitcoinExchange::~BitcoinExchange(void) {};
 
