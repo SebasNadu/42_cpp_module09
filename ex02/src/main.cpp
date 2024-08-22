@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 21:27:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/22 17:18:42 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/22 18:29:43 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	printContainer(C &container, std::string const &msg,
 
 	ss << "-> " << msg << ": ";
 
-	std::cout << color << std::setw(12) << std::left << ss.str()
+	std::cout << color << std::setw(15) << std::left << ss.str()
 		<< getString(container) << RESET << std::endl;
 }
 

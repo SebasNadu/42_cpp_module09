@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 21:32:33 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/22 17:58:40 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/22 18:35:04 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,32 +51,32 @@ public:
 
 	template <>
 	std::vector<unsigned int> const &getSortedContainer<std::vector<unsigned int> >() const {
-		return _sortedVec;
+		return this->_sortedVec;
 	}
 
 	template <>
 	std::deque<unsigned int> const &getSortedContainer<std::deque<unsigned int> >() const {
-		return _sortedDeq;
+		return this->_sortedDeq;
 	}
 
 	template <>
 	std::list<unsigned int> const &getSortedContainer<std::list<unsigned int> >() const {
-		return _sortedLst;
+		return this->_sortedLst;
 	}
 
 	template <>
 	std::vector<unsigned int> const &getUnsortedContainer<std::vector<unsigned int> >() const {
-		return _vec;
+		return this->_vec;
 	}
 
 	template <>
 	std::deque<unsigned int> const &getUnsortedContainer<std::deque<unsigned int> >() const {
-		return _deq;
+		return this->_deq;
 	}
 
 	template <>
 	std::list<unsigned int> const &getUnsortedContainer<std::list<unsigned int> >() const {
-		return _lst;
+		return this->_lst;
 	}
 
 private:
@@ -88,9 +88,14 @@ private:
 	void	_print(C &container, std::string const &msg,
 			std::string const &color, bool withStraggler = true) {
 		std::stringstream ss;
-		int has_straggler = (this->_straggler != -1 && withStraggler);
+		int 							has_straggler = (this->_straggler != -1 && withStraggler);
+		std::string				type;
 
-		ss << "-> " << msg << " vector (size " << container.size() + has_straggler << "): ";
+		if (this->_type == VECTOR) type = "vector";
+		else if (this->_type == DEQUE) type = "deque";
+		else if (this->_type == LIST) type = "list";
+
+		ss << "-> " << msg << ' ' << type << " (size " << container.size() + has_straggler << "): ";
 
 		std::cout << color << std::setw(45) << std::left << ss.str()
 			<< this->_getString(container, withStraggler) << RESET << std::endl;
@@ -206,11 +211,9 @@ private:
 	void	_insertionSortByPair(C &splitContainer) {
 		if (splitContainer.size() <= 1) return;
 
-		typename C::iterator middle = splitContainer.begin();
-		std::advance(middle, splitContainer.size() / 2);
-
-		C	left(splitContainer.begin(), middle);
-		C	right(middle, splitContainer.end());
+		size_t	middleindex = splitContainer.size() / 2;
+		C	left(splitContainer.begin(), splitContainer.begin() + middleindex);
+		C	right(splitContainer.begin() + middleindex, splitContainer.end());
 
 		this->_insertionSortByPair(left);
 		this->_insertionSortByPair(right);

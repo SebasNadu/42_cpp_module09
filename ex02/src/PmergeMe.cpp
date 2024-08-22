@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 00:07:05 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/22 12:36:39 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/22 18:29:06 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,8 @@ void	PmergeMe::_mergeInsertionSort(std::vector<unsigned int> &vec) {
 	this->_insertionSortByPair(splitVec);
 	this->_createSortedSequence(this->_sortedVec, splitVec);
 	if (this->_straggler != -1) {
-		this->_insertAtBisection(this->_sortedVec, this->_straggler);
+		this->_sortedVec.insert(std::lower_bound(this->_sortedVec.begin(),
+				this->_sortedVec.end(), this->_straggler), this->_straggler);
 		if (DEBUG)
 			this->_print(this->_sortedVec, "Straggler inserted", GREEN, false);
 	}
@@ -154,7 +155,8 @@ void	PmergeMe::_mergeInsertionSort(std::deque<unsigned int> &deq) {
 	this->_insertionSortByPair(splitDeq);
 	this->_createSortedSequence(this->_sortedDeq, splitDeq);
 	if (this->_straggler != -1) {
-		this->_insertAtBisection(this->_sortedDeq, this->_straggler);
+		this->_sortedDeq.insert(std::lower_bound(this->_sortedDeq.begin(),
+				this->_sortedDeq.end(), this->_straggler), this->_straggler);
 		if (DEBUG)
 			this->_print(this->_sortedDeq, "Sorted with straggler", GREEN, false);
 	}
@@ -169,7 +171,8 @@ void	PmergeMe::_mergeInsertionSort(std::list<unsigned int> &lst) {
 	this->_insertionSortByPair(splitLst);
 	this->_createSortedSequence(this->_sortedLst, splitLst);
 	if (this->_straggler != -1) {
-		this->_insertAtBisection(this->_sortedLst, this->_straggler);
+		this->_sortedLst.insert(std::lower_bound(this->_sortedLst.begin(),
+				this->_sortedLst.end(), this->_straggler), this->_straggler);
 		if (DEBUG)
 			this->_print(this->_sortedLst, "Sorted with straggler", GREEN, false);
 	}
