@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 00:07:05 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/23 13:03:20 by johnavar         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:29:30 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,20 +180,35 @@ void	PmergeMe::_mergeInsertionSort(std::list<unsigned int> &lst) {
 
 void	PmergeMe::sort(void) {
 	if (this->_type == VECTOR) {
-		if (this->_vec.empty())
+		if (this->_vec.empty()) {
+			if (this->_straggler != -1) {
+				this->_sortedVec.push_back(_straggler);
+				return;
+			}
 			throw std::invalid_argument("Empty array.");
+		}
 		if (DEBUG)
 			this->_print(this->_vec, "Before sort", WHITE);
 		this->_mergeInsertionSort(this->_vec);
 	} else if (this->_type == DEQUE) {
-		if (this->_deq.empty())
+		if (this->_deq.empty()) {
+			if (this->_straggler != -1) {
+				this->_sortedDeq.push_back(_straggler);
+				return;
+			}
 			throw std::invalid_argument("Empty array.");
+		}
 		if (DEBUG)
 			this->_print(this->_deq, "Before sort", WHITE);
 		this->_mergeInsertionSort(this->_deq);
 	} else if (this->_type == LIST) {
-		if (this->_lst.empty())
+		if (this->_lst.empty()) {
+			if (this->_straggler != -1) {
+				this->_sortedLst.push_back(_straggler);
+				return;
+			}
 			throw std::invalid_argument("Empty array.");
+		}
 		if (DEBUG)
 			this->_print(this->_lst, "Before sort", WHITE);
 		this->_mergeInsertionSort(this->_lst);
