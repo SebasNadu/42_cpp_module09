@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 21:27:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/22 18:29:43 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/23 12:35:46 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <sstream>
 #include <set>
+#include <ctime>
 
 void	validateArguments(int argc, char **argv, unsigned int *&array) {
 	if (argc < 2){

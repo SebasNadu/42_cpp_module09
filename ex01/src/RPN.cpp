@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 13:54:45 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/16 16:49:15 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/23 12:30:55 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../include/colors.hpp"
 
 #include <iostream>
+#include <cstdlib>
 
 std::string const RPN::_validOperands = "0123456789";
 std::string const RPN::_validOperators = "+-*/";

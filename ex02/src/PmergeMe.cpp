@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 00:07:05 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/22 18:29:06 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/23 13:03:20 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void	PmergeMe::_mergeInsertionSort(std::vector<unsigned int> &vec) {
 	std::vector< std::pair<unsigned int, unsigned int> > splitVec;
 	this->_createPairs(vec, splitVec);
 	this->_sortEachPair(splitVec);
-	this->_insertionSortByPair(splitVec);
+	this->_mergeSortPairs(splitVec);
 	this->_createSortedSequence(this->_sortedVec, splitVec);
 	if (this->_straggler != -1) {
 		this->_sortedVec.insert(std::lower_bound(this->_sortedVec.begin(),
@@ -152,7 +152,7 @@ void	PmergeMe::_mergeInsertionSort(std::deque<unsigned int> &deq) {
 	std::deque< std::pair<unsigned int, unsigned int> > splitDeq;
 	this->_createPairs(deq, splitDeq);
 	this->_sortEachPair(splitDeq);
-	this->_insertionSortByPair(splitDeq);
+	this->_mergeSortPairs(splitDeq);
 	this->_createSortedSequence(this->_sortedDeq, splitDeq);
 	if (this->_straggler != -1) {
 		this->_sortedDeq.insert(std::lower_bound(this->_sortedDeq.begin(),
@@ -168,7 +168,7 @@ void	PmergeMe::_mergeInsertionSort(std::list<unsigned int> &lst) {
 	std::list< std::pair<unsigned int, unsigned int> > splitLst;
 	this->_createPairs(lst, splitLst);
 	this->_sortEachPair(splitLst);
-	this->_insertionSortByPair(splitLst);
+	this->_mergeSortPairs(splitLst);
 	this->_createSortedSequence(this->_sortedLst, splitLst);
 	if (this->_straggler != -1) {
 		this->_sortedLst.insert(std::lower_bound(this->_sortedLst.begin(),

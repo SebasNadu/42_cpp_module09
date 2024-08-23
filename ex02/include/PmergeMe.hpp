@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 21:32:33 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/08/22 18:35:04 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/08/23 13:02:37 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <algorithm>
 
 #ifndef DEBUG
 # define DEBUG 0
@@ -208,20 +209,20 @@ private:
 	}
 
 	template <typename C>
-	void	_insertionSortByPair(C &splitContainer) {
+	void	_mergeSortPairs(C &splitContainer) {
 		if (splitContainer.size() <= 1) return;
 
 		size_t	middleindex = splitContainer.size() / 2;
 		C	left(splitContainer.begin(), splitContainer.begin() + middleindex);
 		C	right(splitContainer.begin() + middleindex, splitContainer.end());
 
-		this->_insertionSortByPair(left);
-		this->_insertionSortByPair(right);
+		this->_mergeSortPairs(left);
+		this->_mergeSortPairs(right);
 		splitContainer = this->_merge(left, right);
 	}
 
 	template <>
-	void	_insertionSortByPair(std::list<std::pair<unsigned int, unsigned int> > &splitContainer) {
+	void	_mergeSortPairs(std::list<std::pair<unsigned int, unsigned int> > &splitContainer) {
 		if (splitContainer.size() <= 1) return;
 
 		std::list<std::pair<unsigned int, unsigned int> >::iterator middle = splitContainer.begin();
@@ -230,8 +231,8 @@ private:
 		std::list<std::pair<unsigned int, unsigned int> >	left(splitContainer.begin(), middle);
 		std::list<std::pair<unsigned int, unsigned int> >	right(middle, splitContainer.end());
 
-		this->_insertionSortByPair(left);
-		this->_insertionSortByPair(right);
+		this->_mergeSortPairs(left);
+		this->_mergeSortPairs(right);
 		splitContainer = this->_merge(left, right);
 	}
 
